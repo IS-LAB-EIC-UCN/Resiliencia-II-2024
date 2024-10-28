@@ -45,9 +45,8 @@ actual.
 3. **Descuento por Categoría**: Cuando por lo menos existe un producto que está siendo comprado en la categoría "casa".
 4. **Descuento por Cantidad de Productos**: Cuando la cantidad de productos comprados es mayor a dos productos.
 
-Su tarea es refactorar el código para que cumpla con los principios SOLID, específicamente aplicando el patrón Strategy 
-para que los descuentos sean fácilmente intercambiables sin modificar la clase **DescuentoManager**, cuando ya se haya aplicado
-el patrón de diseño. El código del proyecto se encuentra alojado en repositorio github: [https://github.com/IS-LAB-EIC-UCN/Resiliencia-II-2024](https://github.com/IS-LAB-EIC-UCN/Resiliencia-II-2024).
+Su tarea es modificar el sistema para implementar el patrón Decorator, de modo que los descuentos se puedan aplicar de 
+forma acumulativa. El código del proyecto se encuentra alojado en repositorio github: [https://github.com/IS-LAB-EIC-UCN/Resiliencia-II-2024](https://github.com/IS-LAB-EIC-UCN/Resiliencia-II-2024).
 
 <hr>
 
@@ -75,14 +74,14 @@ una vez implementado el patrón de diseño.
 
 ### Evaluación
 
-1. Implementar el patrón de diseño strategy para desacoplar las opciones disponibles de descuentos. Cree una nueva
-Carpeta o Paquete en el proyecto con nombre **_solucion_ (cl.ucn.solucion)**. Modifique la clase GerenciadorDescuento
-e implemente nuevas clases para implementar el patrón. Típicamente, con el patrón Strategy se puede aplicar una estrategia 
-a la vez, sin embargo, para este proyecto usted deberá aplicar todas las estrategias de descuento disponibles. (**50 pts**).
-2. Explique porqué es adecuada la implementación del patrón Strategy para este proyecto y que principio de diseño 
+1. Implementar el patrón de diseño decorator aplicar descuentos acumulativos. Cree una nueva Carpeta o Paquete en el 
+proyecto con nombre **_solucion_ (cl.ucn.solucion)**. Modifique la clase GerenciadorDescuento
+e implemente nuevas clases para implementar el patrón (**50 pts**).
+2. Explique porqué es adecuada la implementación del patrón Decorator para este proyecto y que principio de diseño 
 atiende. Puede apoyarse con algún diagrama de clases construido con su editor de diagrama favorito o a mano (**20pts**). 
 3. Implemente una nueva forma de descuento con la siguiente regla: Cada vez que el total de compras sea superior a 50.000
-se aplicará un descuento del 10%. (**20pts**)
+se aplicará un descuento del 10%. Asegúrese de decorarlo adecuadamente para que se aplique después de los otros 
+descuentos (**20pts**)
 
 <hr>
 
