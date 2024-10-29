@@ -1,7 +1,7 @@
 package cl.ucn.main;
 
 import cl.ucn.modelo.Cliente;
-import cl.ucn.modelo.GerenciadorDescuento;
+import cl.ucn.solucion.*;
 import cl.ucn.modelo.Producto;
 import cl.ucn.modelo.Servicio;
 import jakarta.persistence.EntityManager;
@@ -98,13 +98,17 @@ public class Main extends Application {
         TextField descuentoCumpleanhosTxt = new TextField();
         descuentoCumpleanhosTxt.setEditable(false);
 
-        Text descuentoCatergoriaLbl = new Text("Desc. Catergoria");
+        Text descuentoCatergoriaLbl = new Text("Desc. Categoria");
         TextField descuentoCatergoriaTxt = new TextField();
         descuentoCatergoriaTxt.setEditable(false);
 
         Text descuentoProductosLbl = new Text("Desc. Productos");
         TextField descuentoProductosTxt = new TextField();
         descuentoProductosTxt.setEditable(false);
+
+        Text precioFinalDescLbl = new Text("Descuento");
+        TextField precioFinalDescTxt = new TextField();
+        precioFinalDescTxt.setEditable(false);
 
         Text precioFinalLbl = new Text("Precio Final");
         TextField precioFinalTxt = new TextField();
@@ -120,16 +124,25 @@ public class Main extends Application {
                 // Una nueva instancia de servicio
                 Servicio servicio = new Servicio(em);
                 List<Producto> productos = servicio.getProductosByRut(clienteSeleccionado.getRut());
-                GerenciadorDescuento gerenciadorDescuento = new GerenciadorDescuento();
-                List<Integer> precios = gerenciadorDescuento.calcularPrecioFinal(productos, clienteSeleccionado.getFechaNacimiento(),
+
+                GerenciadorDescuento gerenciadorDescuento = new GerenciadorDescuento(productos, clienteSeleccionado.getFechaNacimiento(),
                         String.valueOf(clienteSeleccionado.getAnhoRegistro()), fechaActualTxt.getText());
+                gerenciadorDescuento.ingresarEstrategia(new EstrategiaDescuentoFidelidad());
+                gerenciadorDescuento.ingresarEstrategia(new EstrategiaDescuentoCumpleanhos());
+                gerenciadorDescuento.ingresarEstrategia(new EstrategiaDescuentoCategoria());
+                gerenciadorDescuento.ingresarEstrategia(new EstrategiaDescuentoProductos());
+                gerenciadorDescuento.ingresarEstrategia(new EstrategiaDescuentoPorcentual());
+                gerenciadorDescuento.aplicarEstrategia();
+                List<Double> precios = gerenciadorDescuento.getValores();
 
                 precioInicialTxt.setText(String.valueOf(precios.get(0)));
                 descuentoFidelidadTxt.setText(String.valueOf(precios.get(1)));
                 descuentoCumpleanhosTxt.setText(String.valueOf(precios.get(2)));
                 descuentoCatergoriaTxt.setText(String.valueOf(precios.get(3)));
                 descuentoProductosTxt.setText(String.valueOf(precios.get(4)));
-                precioFinalTxt.setText(String.valueOf(precios.get(5)));
+                precioFinalDescTxt.setText(String.valueOf(precios.get(5)));
+                double pFinal = precios.get(0)-precios.get(1)-precios.get(3)-precios.get(4) - (precios.get(0)-precios.get(1)-precios.get(3)-precios.get(4))*precios.get(5);
+                precioFinalTxt.setText(String.valueOf(pFinal));
             }
         });
 
@@ -147,6 +160,7 @@ public class Main extends Application {
                 descuentoCatergoriaTxt.setText("");
                 descuentoProductosTxt.setText("");
                 precioFinalTxt.setText("");
+                precioFinalDescTxt.setText("");
             }
         });
         GridPane gridPane = new GridPane();
@@ -173,6 +187,7 @@ public class Main extends Application {
         gridPane2.add(descuentoCumpleanhosLbl, 2,0);
         gridPane2.add(descuentoCatergoriaLbl, 3,0);
         gridPane2.add(descuentoProductosLbl, 4,0);
+        gridPane2.add(precioFinalDescLbl, 5,0);
         gridPane2.add(precioFinalLbl, 6,0);
 
         gridPane2.add(precioInicialTxt, 0,1);
@@ -180,6 +195,7 @@ public class Main extends Application {
         gridPane2.add(descuentoCumpleanhosTxt, 2,1);
         gridPane2.add(descuentoCatergoriaTxt, 3,1);
         gridPane2.add(descuentoProductosTxt, 4,1);
+        gridPane2.add(precioFinalDescTxt, 5,1);
         gridPane2.add(precioFinalTxt, 6,1);
 
         BorderPane root = new BorderPane();
